@@ -1,0 +1,2 @@
+Windows e Linux? Preferencia somente windows 
+Verificar questão de licenciamento se for Microsoft .NET (instalação e uso local)
