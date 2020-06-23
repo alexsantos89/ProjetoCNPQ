@@ -5,8 +5,8 @@ import QtQuick.Controls 2.12
 
 ApplicationWindow {
     visible: true
-    minimumHeight: 480
-    minimumWidth: 640
+    minimumHeight: 768
+    minimumWidth: 1024
 
     //Define o titulo da janela principal
     title: "Projeto ETA"

@@ -6,37 +6,116 @@ Item {
 
     id: detCalhaParshal
     property StackView mStack
-    property string mTitle: "Det. Calha Parshal"
-
-    //TODO: Remover exemplo
-   /* RowLayout {
-
-        spacing: 10
-        Layout.fillWidth: true
-
-        Button {
-            text: "Push"
-            onClicked: mStack.push(parent)
-        }
-        Button {
-            text: "Pop"
-            enabled: mStack.depth > 1
-            onClicked: mStack.pop()
-
-        }
-        Text {
-            text: mStack.depth
-        }
-    }*/
+    property string mTitle: "Determinação Calha Parshal"
 
     ColumnLayout {
-        anchors.centerIn: parent
+        anchors.fill: parent
+        anchors.margins: 11
 
-        Label {
-            text: "TODO"
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            font.pixelSize: 13
+        GroupBox {
+            id: imagesBox1
+            Layout.fillWidth: true
+            title: "Figuras Calha Parshal"
+            clip: true
+
+            GridLayout{
+
+                id: gridFiguras
+                rowSpacing: 30
+                columnSpacing: 30
+                rows: 2
+                flow: GridLayout.TopToBottom
+                Layout.fillWidth: true
+                clip: true
+                anchors.fill: parent
+
+                Image {
+                    id: dimensaoETA
+                    width: 450 //501
+                    height: 300 //308
+                    fillMode: Image.PreserveAspectFit
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    source: "qrc:/imagens/DimensaoETA.jpg"
+
+                }
+
+                Label {
+                    text: "Figura 1 - Dimensões Calha Parshal"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                Image {
+                    id: tabelaDimensoes
+                    width: 450 //501
+                    height: 300 //308
+                    fillMode: Image.PreserveAspectFit
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    source: "qrc:/imagens/tabela_dimensoes.png"
+
+                }
+
+                Label {
+                    text: "Figura 2 - Tab. Dimensões Calha Parshal"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                Image {
+                    id: tabelaVazaoxEspessura
+                    width: 450 //501
+                    height: 300 //308
+                    fillMode: Image.PreserveAspectFit
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    source: "qrc:/imagens/tabelaRedimensionada.png"
+                }
+
+                Label {
+                    text: "Figura 3 - Tabela Vazão X Espessura Garganta"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+            }
         }
+
+
+        RowLayout {
+            id: rowLayout
+
+            GroupBox {
+                id: groupBox
+
+                title: "Seção de Cálculo 1"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                ColumnLayout{
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 10
+
+                    Label { text: "Passo 1 - Inserir bla bla bla" }
+                    TextField { placeholderText: "Inserir Vazão"}
+                }
+            }
+
+            GroupBox {
+
+                title: "Seção de Cálculo 2"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                ColumnLayout{
+                    spacing: 10
+
+                    Label { text: "Passo 1 - Inserir bla bla bla" }
+                    TextField { placeholderText: "Inserir Vazão"}
+                }
+            }
+        }
+
     }
 
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/

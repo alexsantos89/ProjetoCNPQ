@@ -3,5 +3,8 @@
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>qml/principais/DetCalhaParshal.qml</file>
+        <file>imagens/DimensaoETA.jpg</file>
+        <file>imagens/tabela_dimensoes.png</file>
+        <file>imagens/tabelaRedimensionada.png</file>
     </qresource>
 </RCC>
