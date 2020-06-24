@@ -1,6 +1,7 @@
-import QtQuick 2.0
+import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import "../popups"
 
 Item {
 
@@ -92,6 +93,10 @@ Item {
 
                     Label { text: "Passo 1 - Inserir bla bla bla" }
                     TextField { placeholderText: "Inserir Vazão"}
+                    Button {
+                        text:"Ok"
+                        onClicked: vazaoDialog.open()
+                    }
                 }
             }
 
@@ -110,6 +115,12 @@ Item {
             }
         }
 
+    }
+
+    VazaoDialog {
+        id: vazaoDialog
+        x: Math.round((parent.width - width) / 2)
+        y: Math.round((parent.height - height) / 2)
     }
 
 }

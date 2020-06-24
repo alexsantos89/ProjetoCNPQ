@@ -6,5 +6,7 @@
         <file>imagens/DimensaoETA.jpg</file>
         <file>imagens/tabela_dimensoes.png</file>
         <file>imagens/tabelaRedimensionada.png</file>
+        <file>qml/popups/VazaoDialog.qml</file>
+        <file>qml/models/VazaoModel.qml</file>
     </qresource>
 </RCC>
