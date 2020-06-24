@@ -33,6 +33,7 @@ Dialog {
             clip: true
             highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
             focus: true
+            keyNavigationEnabled: true
 
             delegate: ItemDelegate {
 
