@@ -1,2 +1,10 @@
 Windows e Linux? Preferencia somente windows 
 Verificar questão de licenciamento se for Microsoft .NET (instalação e uso local)
+
+
+------
+
+layout secao 1 ficar igual o calculo 2 (top left)
+no calculo 2 ter opçao de botão para fazer upload de csv
+se o cara digitar um W que nao existe, ao clicar no botao clique aqui informar que W nao foi encontrado na tabela 2 
+na secao de calculo 2 no passo 2 permitir escolher ou K e N ou W (se fizer um bloqueia o outro)

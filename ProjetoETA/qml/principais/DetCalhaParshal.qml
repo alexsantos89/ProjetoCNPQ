@@ -7,7 +7,7 @@ Item {
 
     id: detCalhaParshal
     property StackView mStack
-    property string mTitle: "Determinação Calha Parshal"
+    property string mTitle: "Calha Parshall: determinação da garganta (W) e cálculo da vazão"
 
     ColumnLayout {
         anchors.fill: parent
@@ -16,7 +16,7 @@ Item {
         GroupBox {
             id: imagesBox1
             Layout.fillWidth: true
-            title: "Figuras Calha Parshal"
+            //title: "Figuras Calha Parshal"
             clip: true
 
             GridLayout{
@@ -41,7 +41,7 @@ Item {
                 }
 
                 Label {
-                    text: "Figura 1 - Dimensões Calha Parshal"
+                    text: "Figura 1 - Dimensões da calha parshall (planta e corte)"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
@@ -56,7 +56,7 @@ Item {
                 }
 
                 Label {
-                    text: "Figura 2 - Tab. Dimensões Calha Parshal"
+                    text: "Tabela 1 - Dimensões da calha parshal"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
@@ -70,7 +70,7 @@ Item {
                 }
 
                 Label {
-                    text: "Figura 3 - Tabela Vazão X Espessura Garganta"
+                    text: "Tabela 2 - Vazão x Garganta (W) e valores de K e n"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
@@ -83,7 +83,7 @@ Item {
             GroupBox {
                 id: groupBox
 
-                title: "Seção de Cálculo 1"
+                title: "Seção de cálculo 1 - determinação da garganta (W)"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
@@ -91,26 +91,39 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 10
 
-                    Label { text: "Passo 1 - Inserir bla bla bla" }
-                    TextField { placeholderText: "Inserir Vazão"}
+                    Label { text: "Passo 1 - Inserir valor da vazão (L/s):" }
+                    TextField { placeholderText: "Vazão (L/s)"}
+                    Label { text: "Passo 2 - Escolha a calha desejada (W):" }
                     Button {
-                        text:"Ok"
+                        text:"Clique aqui"
                         onClicked: vazaoDialog.open()
                     }
+                    Label { text: "Conforme a calha selecionada, as dimensões são: " }
+                    //TODO: gerar tabela dinamica com os resultados
+
                 }
             }
 
             GroupBox {
 
-                title: "Seção de Cálculo 2"
+                title: "Seção de cálculo 2 - cálculo da vazão"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
                 ColumnLayout{
                     spacing: 10
 
-                    Label { text: "Passo 1 - Inserir bla bla bla" }
-                    TextField { placeholderText: "Inserir Vazão"}
+                    Label { text: "Passo 1 - Inserir altura da lâmina líquida (Ha):" }
+                    TextField { placeholderText: "Ha (m)"}
+                    Label { text: "Passo 2 - Utilize o K e n sugerido da seção 1 ou digite o desejado (ver tabela 2):" }
+                    TextField { placeholderText: "K"}
+                    TextField { placeholderText: "n"}
+                    Label { text: "Passo 3 - Aperte o botão para calcular:" }
+                    Button {
+                        text:"Calcular"
+                    }
+                    Label { text: "Resultado da vazão (L/s):" }
+                    TextField { }
                 }
             }
         }

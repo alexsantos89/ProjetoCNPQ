@@ -34,7 +34,7 @@ ApplicationWindow {
 
 
     //Define o footer e header da pagina
-    footer: ToolBar {
+    header: ToolBar {
 
         ToolButton {
             text: "Voltar"

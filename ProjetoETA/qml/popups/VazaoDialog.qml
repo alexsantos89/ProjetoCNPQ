@@ -5,7 +5,7 @@ import "../models"
 
 Dialog {
 
-    title: "Selecione a Garganta (mm) desejada"
+    title: "Selecione a garganta (W) desejada"
     modal: true
     width: 540
     height: 300
@@ -41,7 +41,7 @@ Dialog {
                 contentItem: ColumnLayout{
                     width: parent.width - 20
                     spacing: 0
-                    Label { text: "Garganta de " + w + " mm" }
+                    Label { text: "Garganta (W) de " + w + " mm" }
                 }
             }
 
