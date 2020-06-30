@@ -2,16 +2,25 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import "../models"
+import "../principais"
 
 Dialog {
 
+    id: vazaoDialog
     title: "Selecione a garganta (W) desejada"
     modal: true
     width: 540
     height: 300
     standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
 
-    //header: Label {text: "Selecione a Garganta (mm) desejada"}
+    property TextField vazaoText
+    property TextField kText
+
+    onAccepted: kText.text = "fdsa"
+
+    onRejected: vazaoDialog.close()
+
+    header: Label {text: "Selecione a Garganta (mm) desejada" ; leftPadding: 10}
 
     contentItem: ColumnLayout{
 

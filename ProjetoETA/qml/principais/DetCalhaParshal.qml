@@ -92,10 +92,11 @@ Item {
                     spacing: 10
 
                     Label { text: "Passo 1 - Inserir valor da vazão (L/s):" }
-                    TextField { placeholderText: "Vazão (L/s)"}
+                    TextField { id:vazaoText ; placeholderText: "Vazão (L/s)" ; validator: DoubleValidator{bottom: 0.85 ; top: 3950.0 ; decimals: 2}}
                     Label { text: "Passo 2 - Escolha a calha desejada (W):" }
                     Button {
                         text:"Clique aqui"
+                        enabled: vazaoText.acceptableInput
                         onClicked: vazaoDialog.open()
                     }
                     Label { text: "Conforme a calha selecionada, as dimensões são: " }
@@ -116,7 +117,7 @@ Item {
                     Label { text: "Passo 1 - Inserir altura da lâmina líquida (Ha):" }
                     TextField { placeholderText: "Ha (m)"}
                     Label { text: "Passo 2 - Utilize o K e n sugerido da seção 1 ou digite o desejado (ver tabela 2):" }
-                    TextField { placeholderText: "K"}
+                    TextField { id: kText ; placeholderText: "K" }
                     TextField { placeholderText: "n"}
                     Label { text: "Passo 3 - Aperte o botão para calcular:" }
                     Button {
@@ -134,6 +135,8 @@ Item {
         id: vazaoDialog
         x: Math.round((parent.width - width) / 2)
         y: Math.round((parent.height - height) / 2)
+        kText: kText
+        vazaoText: vazaoText
     }
 
 }
