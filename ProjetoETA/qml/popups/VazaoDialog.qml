@@ -15,12 +15,23 @@ Dialog {
 
     property TextField vazaoText
     property TextField kText
+    property TextField nText
+    property bool filtered
 
-    onAccepted: kText.text = "fdsa"
+    onAccepted: {
+        //TODO define locale para transformar de ponto para virgula (talvez so precisa trocar . por ,)
+        kText.text = vazaoListView.currentItem.myData.k
+        nText.text = vazaoListView.currentItem.myData.n
+    }
 
     onRejected: vazaoDialog.close()
 
-    header: Label {text: "Selecione a Garganta (mm) desejada" ; leftPadding: 10}
+    onVisibleChanged: function (){
+        if (vazaoDialog.visible)
+            createModel(vazaoDialog.filtered)
+    }
+
+    header: Label {text: "Selecione a Garganta (mm) desejada" ; font.bold: true; leftPadding: 10 ; topPadding: 10 }
 
     contentItem: ColumnLayout{
 
@@ -38,24 +49,46 @@ Dialog {
             anchors.fill: parent
             anchors.margins: 11
             verticalLayoutDirection: ListView.TopToBottom
-            model: VazaoModel {}
+            model: myModel
             clip: true
             highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
             focus: true
 
             delegate: ItemDelegate {
 
+                property variant myData: model
+
                 onClicked: ListView.view.currentIndex = index
 
                 contentItem: ColumnLayout{
                     width: parent.width - 20
                     spacing: 0
-                    Label { text: "Garganta (W) de " + w + " mm" }
+                    Label {text: "Garganta (W) de " + w + " mm" }
                 }
             }
 
-            ScrollBar.vertical: ScrollBar {}
+            ScrollBar.vertical: ScrollBar { policy: ScrollBar.AlwaysOn }
         }
+    }
+
+    function createModel(filtered = false){
+        myModel.clear()
+        for(var i=0;i<vazaoModel.count; i++)
+            if(filtered){
+                if(vazaoModel.get(i).vazaoMin <= parseInt(vazaoText.text) && vazaoModel.get(i).vazaoMax >= parseInt(vazaoText.text))
+                    myModel.append(vazaoModel.get(i))
+            } else {
+                myModel.append(vazaoModel.get(i))
+            }
+
+    }
+
+    ListModel {
+        id: myModel
+    }
+
+    VazaoModel {
+        id: vazaoModel
     }
 
 }

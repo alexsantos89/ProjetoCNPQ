@@ -91,17 +91,33 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 10
 
+                    ToolTip.delay: 1000
+                    ToolTip.timeout: 5000
+                    ToolTip.visible: hovered
+                    ToolTip.text: "Botão só é habilitado após uma vazão válida ser digitado no Passo 1 (Tabela 2)"
+
                     Label { text: "Passo 1 - Inserir valor da vazão (L/s):" }
-                    TextField { id:vazaoText ; placeholderText: "Vazão (L/s)" ; validator: DoubleValidator{bottom: 0.85 ; top: 3950.0 ; decimals: 2}}
+                    TextField { id:vazaoText
+                        placeholderText: "Vazão (L/s)"
+
+                        //TODO define locale no validator
+                        validator: DoubleValidator{bottom: 0.85 ; top: 3950.0 ; decimals: 2}
+                    }
                     Label { text: "Passo 2 - Escolha a calha desejada (W):" }
                     Button {
+                        id: calculaW
                         text:"Clique aqui"
                         enabled: vazaoText.acceptableInput
-                        onClicked: vazaoDialog.open()
+                        onClicked: {
+                            vazaoDialog.filtered = true
+                            vazaoDialog.open()
+                        }
                     }
                     Label { text: "Conforme a calha selecionada, as dimensões são: " }
                     //TODO: gerar tabela dinamica com os resultados
-
+                    Item{
+                        Layout.fillHeight: true
+                    }
                 }
             }
 
@@ -118,7 +134,7 @@ Item {
                     TextField { placeholderText: "Ha (m)"}
                     Label { text: "Passo 2 - Utilize o K e n sugerido da seção 1 ou digite o desejado (ver tabela 2):" }
                     TextField { id: kText ; placeholderText: "K" }
-                    TextField { placeholderText: "n"}
+                    TextField { id: nText ; placeholderText: "n"}
                     Label { text: "Passo 3 - Aperte o botão para calcular:" }
                     Button {
                         text:"Calcular"
@@ -136,6 +152,7 @@ Item {
         x: Math.round((parent.width - width) / 2)
         y: Math.round((parent.height - height) / 2)
         kText: kText
+        nText: nText
         vazaoText: vazaoText
     }
 
