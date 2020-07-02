@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import "../models"
 import "../principais"
+import "../views"
 
 Dialog {
 
@@ -17,11 +18,16 @@ Dialog {
     property TextField kText
     property TextField nText
     property bool filtered
+    property CalhaGridview calhaView
 
-    onAccepted: {
+    onAccepted: function() {
         //TODO define locale para transformar de ponto para virgula (talvez so precisa trocar . por ,)
         kText.text = vazaoListView.currentItem.myData.k
         nText.text = vazaoListView.currentItem.myData.n
+        if (vazaoDialog.filtered){
+            calhaView.myData = vazaoListView.currentItem.myData
+            calhaView.updateModel()
+        }
     }
 
     onRejected: vazaoDialog.close()
@@ -75,12 +81,11 @@ Dialog {
         myModel.clear()
         for(var i=0;i<vazaoModel.count; i++)
             if(filtered){
-                if(vazaoModel.get(i).vazaoMin <= parseInt(vazaoText.text) && vazaoModel.get(i).vazaoMax >= parseInt(vazaoText.text))
+                if(vazaoModel.get(i).vazaoMin <= parseFloat(vazaoText.text) && vazaoModel.get(i).vazaoMax >= parseFloat(vazaoText.text))
                     myModel.append(vazaoModel.get(i))
             } else {
                 myModel.append(vazaoModel.get(i))
             }
-
     }
 
     ListModel {

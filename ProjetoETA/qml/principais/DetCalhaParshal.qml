@@ -1,7 +1,9 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import QtQml 2.12
 import "../popups"
+import "../views"
 
 Item {
 
@@ -10,13 +12,14 @@ Item {
     property string mTitle: "Calha Parshall: determinação da garganta (W) e cálculo da vazão"
 
     ColumnLayout {
+
+        id: mainColumn
         anchors.fill: parent
         anchors.margins: 11
 
         GroupBox {
             id: imagesBox1
             Layout.fillWidth: true
-            //title: "Figuras Calha Parshal"
             clip: true
 
             GridLayout{
@@ -86,9 +89,10 @@ Item {
                 title: "Seção de cálculo 1 - determinação da garganta (W)"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.preferredWidth: imagesBox1.implicitWidth / 2
 
                 ColumnLayout{
-                    anchors.verticalCenter: parent.verticalCenter
+                    //anchors.verticalCenter: parent.verticalCenter
                     spacing: 10
 
                     ToolTip.delay: 1000
@@ -97,13 +101,16 @@ Item {
                     ToolTip.text: "Botão só é habilitado após uma vazão válida ser digitado no Passo 1 (Tabela 2)"
 
                     Label { text: "Passo 1 - Inserir valor da vazão (L/s):" }
-                    TextField { id:vazaoText
-                        placeholderText: "Vazão (L/s)"
 
+                    TextField {
+                        id:vazaoText
+                        placeholderText: "Vazão (L/s)"
                         //TODO define locale no validator
                         validator: DoubleValidator{bottom: 0.85 ; top: 3950.0 ; decimals: 2}
                     }
+
                     Label { text: "Passo 2 - Escolha a calha desejada (W):" }
+
                     Button {
                         id: calculaW
                         text:"Clique aqui"
@@ -113,11 +120,15 @@ Item {
                             vazaoDialog.open()
                         }
                     }
+
                     Label { text: "Conforme a calha selecionada, as dimensões são: " }
-                    //TODO: gerar tabela dinamica com os resultados
-                    Item{
+
+                    CalhaGridview {
+                        id: calhaView
                         Layout.fillHeight: true
+                        Layout.fillWidth: true
                     }
+
                 }
             }
 
@@ -126,21 +137,34 @@ Item {
                 title: "Seção de cálculo 2 - cálculo da vazão"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.preferredWidth: imagesBox1.implicitWidth / 2
 
                 ColumnLayout{
                     spacing: 10
 
                     Label { text: "Passo 1 - Inserir altura da lâmina líquida (Ha):" }
-                    TextField { placeholderText: "Ha (m)"}
-                    Label { text: "Passo 2 - Utilize o K e n sugerido da seção 1 ou digite o desejado (ver tabela 2):" }
-                    TextField { id: kText ; placeholderText: "K" }
-                    TextField { id: nText ; placeholderText: "n"}
+                    TextField { id: haText ; placeholderText: "Ha (m)" ; validator: DoubleValidator{decimals: 2}}
+                    Label { text: "Passo 2 - Utilize o K e n sugerido da seção 1 ou selecione outro W (ver tabela 2):" }
+                    Button {
+                        id: alteraW
+                        text:"Alterar W"
+                        onClicked: {
+                            vazaoDialog.filtered = false
+                            vazaoDialog.open()
+                        }
+                    }
+                    TextField { id: kText ; placeholderText: "K" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
+                    TextField { id: nText ; placeholderText: "n" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
                     Label { text: "Passo 3 - Aperte o botão para calcular:" }
                     Button {
                         text:"Calcular"
+                        enabled: haText.acceptableInput && kText.acceptableInput && nText.acceptableInput
+                        onClicked: function () {
+                            vazaoResultadoText.text = (parseFloat(haText.text) / (parseFloat(kText.text) * parseFloat(nText.text))).toFixed(2)
+                        }
                     }
                     Label { text: "Resultado da vazão (L/s):" }
-                    TextField { }
+                    TextField { id: vazaoResultadoText ; enabled: false ; readOnly: true ; validator: DoubleValidator{} }
                 }
             }
         }
@@ -154,6 +178,7 @@ Item {
         kText: kText
         nText: nText
         vazaoText: vazaoText
+        calhaView: calhaView
     }
 
 }

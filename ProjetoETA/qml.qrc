@@ -8,5 +8,6 @@
         <file>imagens/tabelaRedimensionada.png</file>
         <file>qml/popups/VazaoDialog.qml</file>
         <file>qml/models/VazaoModel.qml</file>
+        <file>qml/views/CalhaGridview.qml</file>
     </qresource>
 </RCC>
