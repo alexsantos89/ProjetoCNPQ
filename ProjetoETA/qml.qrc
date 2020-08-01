@@ -9,5 +9,7 @@
         <file>qml/popups/VazaoDialog.qml</file>
         <file>qml/models/VazaoModel.qml</file>
         <file>qml/views/CalhaGridview.qml</file>
+        <file>qml/popups/AlertPopup.qml</file>
+        <file>qml/popups/AlertPopup2.qml</file>
     </qresource>
 </RCC>

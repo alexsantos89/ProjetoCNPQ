@@ -10,8 +10,14 @@ Item {
 
     GridLayout {
 
-        rows: 1
+        id: mainGrid
+
+        rows: 2
+        columns: 9
         flow: GridLayout.TopToBottom
+        visible: false
+
+        Label { id: medW ; text: "Garganta (W) de -- mm" ; Layout.columnSpan: 9 }
 
         Label { id: medA ; text: "A: " }
         Label { id: medB ; text: "B: " }
@@ -28,6 +34,9 @@ Item {
     }
 
     function updateModel(){
+        mainGrid.visible = true
+        medW.text = "Garganta (W) de " + myData.w +  " mm"
+
         medA.text = "A: " + myData.medA
         medB.text = "B: " + myData.medB
         medC.text = "C: " + myData.medC

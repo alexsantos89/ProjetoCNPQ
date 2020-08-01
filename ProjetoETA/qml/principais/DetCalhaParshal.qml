@@ -1,9 +1,11 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import QtQuick.Dialogs 1.2
 import QtQml 2.12
 import "../popups"
 import "../views"
+import org.qtproject.example 1.0
 
 Item {
 
@@ -121,7 +123,7 @@ Item {
                         }
                     }
 
-                    Label { text: "Conforme a calha selecionada, as dimensões são: " }
+                    Label { text: "Conforme a calha selecionada, as dimensões em centimetros são: " }
 
                     CalhaGridview {
                         id: calhaView
@@ -142,8 +144,23 @@ Item {
                 ColumnLayout{
                     spacing: 10
 
-                    Label { text: "Passo 1 - Inserir altura da lâmina líquida (Ha):" }
-                    TextField { id: haText ; placeholderText: "Ha (m)" ; validator: DoubleValidator{decimals: 2}}
+                    Label { text: "Passo 1 - Inserir altura da lâmina líquida (Ha) em metros:" }
+                    RowLayout{
+                        TextField { id: haText ; placeholderText: "Ha (m)" ; enabled: !vazaoHandler.parsed ; validator: DoubleValidator{decimals: 2} }
+                        Label { text: "ou" }
+                        Button {
+                            id: abreCSV
+                            text: vazaoHandler.parsed ? "Reset" : "Upload CSV"
+                            onClicked: function() {
+                                if (vazaoHandler.parsed) {
+                                    vazaoHandler.reset()
+                                } else {
+                                    fileDialog.selectExisting = true
+                                    fileDialog.open()
+                                }
+                            }
+                        }
+                    }
                     Label { text: "Passo 2 - Utilize o K e n sugerido da seção 1 ou selecione outro W (ver tabela 2):" }
                     Button {
                         id: alteraW
@@ -157,14 +174,19 @@ Item {
                     TextField { id: nText ; placeholderText: "n" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
                     Label { text: "Passo 3 - Aperte o botão para calcular:" }
                     Button {
-                        text:"Calcular"
-                        enabled: haText.acceptableInput && kText.acceptableInput && nText.acceptableInput
-                        onClicked: function () {
-                            vazaoResultadoText.text = (parseFloat(haText.text) / (parseFloat(kText.text) * parseFloat(nText.text))).toFixed(2)
+                        text: vazaoHandler.parsed ? "Exportar CSV" : "Calcular"
+                        enabled: (haText.acceptableInput || vazaoHandler.parsed ) && kText.acceptableInput && nText.acceptableInput
+                        onClicked: function() {
+                            if (vazaoHandler.parsed) {
+                                fileDialog.selectExisting = false
+                                fileDialog.open()
+                            } else {
+                                vazaoResultadoText.text = (parseFloat(haText.text) / (parseFloat(kText.text) * parseFloat(nText.text))).toFixed(2)
+                            }
                         }
                     }
-                    Label { text: "Resultado da vazão (L/s):" }
-                    TextField { id: vazaoResultadoText ; enabled: false ; readOnly: true ; validator: DoubleValidator{} }
+                    Label { text: "Resultado da vazão (L/s):" ; visible: !vazaoHandler.parsed }
+                    TextField { id: vazaoResultadoText ; enabled: false ; readOnly: true ; visible: !vazaoHandler.parsed ; validator: DoubleValidator{} }
                 }
             }
         }
@@ -179,6 +201,33 @@ Item {
         nText: nText
         vazaoText: vazaoText
         calhaView: calhaView
+    }
+
+    FileDialog {
+        id: fileDialog
+        nameFilters: ["CSV files (*.csv)"]
+        onAccepted: {
+            if (fileDialog.selectExisting)
+                vazaoHandler.fileUrl = fileUrl
+            else
+                vazaoHandler.saveAs(fileUrl, selectedNameFilter)
+        }
+    }
+
+    CSVVazaoHandler {
+        id: vazaoHandler
+        onParsedChanged: function(msg,error) {
+            if (msg.length != 0)
+            {
+                popup.msg = msg
+                popup.error = error
+                popup.open()
+            }
+        }
+    }
+
+    AlertPopup2 {
+        id: popup
     }
 
 }

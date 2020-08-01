@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+#include <csvvazaohandler.h>
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -15,6 +17,11 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
+
+    qmlRegisterType<csvvazaohandler>("org.qtproject.example", 1, 0, "CSVVazaoHandler");
+
+    //sExternalUIConfiguration = new csvvazaohandler();
+    //engine.rootContext()->setContextProperty("CSVVazaoHandler", sExternalUIConfiguration);
 
     return app.exec();
 }

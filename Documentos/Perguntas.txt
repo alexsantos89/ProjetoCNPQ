@@ -8,3 +8,10 @@ layout secao 1 ficar igual o calculo 2 (top left)
 no calculo 2 ter opçao de botão para fazer upload de csv
 se o cara digitar um W que nao existe, ao clicar no botao clique aqui informar que W nao foi encontrado na tabela 2 
 na secao de calculo 2 no passo 2 permitir escolher ou K e N ou W (se fizer um bloqueia o outro)
+
+
+------
+
+- label com o tamanho da garganta em cima das dimensoes na secao 1 = OK
+- botar para importar CSV com tooltip de como dever ser o CSV e botao para exportar modelo de CSV
+- corrigir o calculo de Q (verificar questao de . e , na casa decimal, resultados funcionam somente para .)
