@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
-    qmlRegisterType<csvvazaohandler>("org.qtproject.example", 1, 0, "CSVVazaoHandler");
+    qmlRegisterType<csvvazaohandler>("xyz.aahome89.base", 1, 0, "CSVVazaoHandler");
 
     //sExternalUIConfiguration = new csvvazaohandler();
     //engine.rootContext()->setContextProperty("CSVVazaoHandler", sExternalUIConfiguration);

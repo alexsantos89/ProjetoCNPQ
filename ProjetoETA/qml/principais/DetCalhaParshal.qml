@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.2
 import QtQml 2.12
 import "../popups"
 import "../views"
-import org.qtproject.example 1.0
+import xyz.aahome89.base 1.0
 
 Item {
 
@@ -181,7 +181,8 @@ Item {
                                 fileDialog.selectExisting = false
                                 fileDialog.open()
                             } else {
-                                vazaoResultadoText.text = (parseFloat(haText.text) / (parseFloat(kText.text) * parseFloat(nText.text))).toFixed(2)
+                                //vazaoResultadoText.text = (parseFloat(haText.text) / (parseFloat(kText.text) * parseFloat(nText.text))).toFixed(2)
+                                vazaoResultadoText.text = vazaoHandler.calculo_vazao(parseFloat(haText.text)).toFixed(2)
                             }
                         }
                     }
@@ -201,6 +202,7 @@ Item {
         nText: nText
         vazaoText: vazaoText
         calhaView: calhaView
+        vazaoHandler: vazaoHandler
     }
 
     FileDialog {

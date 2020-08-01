@@ -1,4 +1,5 @@
 #include "csvvazaohandler.h"
+#include <cmath>
 
 csvvazaohandler::csvvazaohandler(QObject *parent) : QObject(parent)
 {
@@ -57,9 +58,10 @@ void csvvazaohandler::saveAs(const QUrl &arg, const QString &fileType)
     }
 
     QTextStream streamOut(&f);
+    streamOut << "Ha,k,n,Q" << Qt::endl;
 
     for (int i = 0; i < m_listVazao.size(); ++i) {
-        streamOut << i << "," << "10" << Qt::endl;
+        streamOut << m_listVazao.at(i) << "," << k() << "," << n() << "," << calculo_vazao(m_listVazao.at(i)) << Qt::endl;
     }
 
     f.close();
@@ -75,9 +77,37 @@ bool csvvazaohandler::parsed() const
     return m_parsed;
 }
 
+double csvvazaohandler::ha() const
+{
+    return m_ha;
+}
+
+double csvvazaohandler::k() const
+{
+    return m_k;
+}
+
+double csvvazaohandler::n() const
+{
+    return m_n;
+}
+
 void csvvazaohandler::setParsed(const bool value)
 {
     m_parsed = value;
+}
+
+void csvvazaohandler::setHa(const double ha)
+{
+    m_ha = ha;
+}
+void csvvazaohandler::setK(const double k)
+{
+    m_k = k;
+}
+void csvvazaohandler::setN(const double n)
+{
+    m_n = n;
 }
 
 void csvvazaohandler::reset()
@@ -85,4 +115,9 @@ void csvvazaohandler::reset()
     m_fileUrl = nullptr;
     m_parsed = false;
     emit parsedChanged();
+}
+
+double csvvazaohandler::calculo_vazao(const double ha)
+{
+    return pow(ha/k(),1/n());
 }

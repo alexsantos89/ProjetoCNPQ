@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.12
 import "../models"
 import "../principais"
 import "../views"
+import xyz.aahome89.base 1.0
 
 Dialog {
 
@@ -19,11 +20,14 @@ Dialog {
     property TextField nText
     property bool filtered
     property CalhaGridview calhaView
+    property CSVVazaoHandler vazaoHandler
 
     onAccepted: function() {
         //TODO define locale para transformar de ponto para virgula (talvez so precisa trocar . por ,)
         kText.text = vazaoListView.currentItem.myData.k
         nText.text = vazaoListView.currentItem.myData.n
+        vazaoHandler.k = vazaoListView.currentItem.myData.k
+        vazaoHandler.n = vazaoListView.currentItem.myData.n
         if (vazaoDialog.filtered){
             calhaView.myData = vazaoListView.currentItem.myData
             calhaView.updateModel()
