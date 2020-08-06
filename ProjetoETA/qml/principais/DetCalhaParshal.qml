@@ -182,7 +182,7 @@ Item {
                                 fileDialog.open()
                             } else {
                                 //vazaoResultadoText.text = (parseFloat(haText.text) / (parseFloat(kText.text) * parseFloat(nText.text))).toFixed(2)
-                                vazaoResultadoText.text = vazaoHandler.calculo_vazao(parseFloat(haText.text)).toFixed(2)
+                                vazaoResultadoText.text = vazaoHandler.calculo_vazao(parseFloat(haText.text.replace(",","."))).toFixed(2)
                             }
                         }
                     }

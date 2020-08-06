@@ -85,7 +85,7 @@ Dialog {
         myModel.clear()
         for(var i=0;i<vazaoModel.count; i++)
             if(filtered){
-                if(vazaoModel.get(i).vazaoMin <= parseFloat(vazaoText.text) && vazaoModel.get(i).vazaoMax >= parseFloat(vazaoText.text))
+                if(vazaoModel.get(i).vazaoMin <= parseFloat(vazaoText.text.replace(",",".")) && vazaoModel.get(i).vazaoMax >= parseFloat(vazaoText.text.replace(",",".")))
                     myModel.append(vazaoModel.get(i))
             } else {
                 myModel.append(vazaoModel.get(i))
