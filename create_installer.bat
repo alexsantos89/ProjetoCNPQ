@@ -1,0 +1,2 @@
+archivegen.exe ProjetoInstalador\packages\xyz.aahome89.projetoeta\data\data.7z release\
+binarycreator.exe --offline-only -c ProjetoInstalador\config\config.xml -p ProjetoInstalador\packages ProjetoInstalador\ProjetoETA.exe

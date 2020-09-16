@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Projeto ETA</Name>
+    <Version>1.0.0</Version>
+    <Title>Projeto ETA Installer</Title>
+    <Publisher>ProjetoETA</Publisher>
+    <StartMenuDir>Projeto ETA</StartMenuDir>
+    <TargetDir>@HomeDir@/@Publisher@/SetupFiles</TargetDir>
+</Installer>

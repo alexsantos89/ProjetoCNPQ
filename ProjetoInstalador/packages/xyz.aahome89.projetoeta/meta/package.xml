@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>ProjetoETA</DisplayName>
+    <Description>ProjetoETA package</Description>
+    <Description xml:lang="pt_br">Módulo ProjetoETA</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2020-08-22</ReleaseDate>
+    <Name>xyz.aahome89.projetoeta</Name>
+    <Licenses>
+        <License name="License Agreement" file="COPYRIGHT.txt" />
+    </Licenses>
+    <SortingPriority>100</SortingPriority>
+    <Default>true</Default>
+    <Script>installscript.qs</Script>
+    <ForcedInstallation>false</ForcedInstallation>
+    <Essential>false</Essential>
+</Package>
