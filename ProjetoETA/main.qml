@@ -15,7 +15,7 @@ ApplicationWindow {
 
     Action {
         id: detCalhaParshalAction
-        text: "Det. Calha Parshal"
+        text: "Calha Parshall"
         onTriggered: {
             mainStack.push("qrc:/qml/principais/DetCalhaParshal.qml", { mStack: mainStack });
             //toolbarTitle.text = "Det. Calha Parshal";

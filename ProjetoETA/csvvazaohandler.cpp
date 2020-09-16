@@ -58,7 +58,7 @@ void csvvazaohandler::saveAs(const QUrl &arg, const QString &fileType)
     }
 
     QTextStream streamOut(&f);
-    streamOut << "Ha,k,n,Q" << Qt::endl;
+    streamOut << "Ha(m),k,n,Q(L/s)" << Qt::endl;
 
     for (int i = 0; i < m_listVazao.size(); ++i) {
         streamOut << m_listVazao.at(i) << "," << k() << "," << n() << "," << calculo_vazao(m_listVazao.at(i)) << Qt::endl;
@@ -119,5 +119,5 @@ void csvvazaohandler::reset()
 
 double csvvazaohandler::calculo_vazao(const double ha)
 {
-    return pow(ha/k(),1/n());
+    return pow(ha/k(),1/n())*1000;
 }
