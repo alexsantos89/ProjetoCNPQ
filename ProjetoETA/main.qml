@@ -13,12 +13,31 @@ ApplicationWindow {
 
     //Definicao de todas as acoes (TODO: criar objetos dinamicamente usando javascript https://doc.qt.io/qt-5/qtqml-javascript-dynamicobjectcreation.html)
 
+    function setCurrentTitle() {
+        var loaded
+        for( var i = 0 ; i < mainRepeater.count ; i++) {
+            if ( mainRepeater.itemAt(i).item.visible ) {
+                loaded = mainRepeater.itemAt(i).item;
+                break;
+            }
+        }
+        console.log(loaded.mTitle);
+        toolbarTitle.text = loaded.mTitle
+    }
+
     Action {
         id: detCalhaParshalAction
         text: "Calha Parshall"
         onTriggered: {
-            mainStack.push("qrc:/qml/principais/DetCalhaParshal.qml", { mStack: mainStack });
-            //toolbarTitle.text = "Det. Calha Parshal";
+            currentPage = 'DetCalhaParshal'            
+        }
+    }
+
+    Action {
+        id: detCalhaParshalAction2
+        text: "Calha Parshall 2"
+        onTriggered: {
+            currentPage = 'DetCalhaParshal2'
         }
     }
 
@@ -27,6 +46,7 @@ ApplicationWindow {
         Menu {
             title: "&Menu"
             MenuItem { action: detCalhaParshalAction }
+            MenuItem { action: detCalhaParshalAction2 }
             MenuSeparator {}
             MenuItem { text: "Sair"; onTriggered: Qt.quit() }
         }
@@ -36,14 +56,19 @@ ApplicationWindow {
     //Define o footer e header da pagina
     header: ToolBar {
 
-        ToolButton {
-            text: "Voltar"
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.verticalCenter: parent.verticalCenter
-            enabled: mainStack.depth > 1
-            onClicked: mainStack.pop()
-        }
+//        ToolButton {
+//            text: "Voltar"
+//            anchors.left: parent.left
+//            anchors.leftMargin: 10
+//            anchors.verticalCenter: parent.verticalCenter
+//            enabled: mainStack.depth > 2
+//            onClicked: {
+//                var item1 = mainStack.pop();
+//                var item2 = mainStack.pop();
+//                mainStack.push(item1);
+//                mainStack.push(item2);
+//            }
+//        }
 
         Label {
             id: toolbarTitle
@@ -53,30 +78,34 @@ ApplicationWindow {
         }
     }
 
-    //Stack da janela principal
-    StackView {
-        id: mainStack
-        initialItem: mainView
-        anchors.fill: parent
+    // Put the name of the QML files containing your pages (without the '.qml')
+    property variant pagesList  : [
+        "MainView",
+        "DetCalhaParshal",
+        "DetCalhaParshal2"
+    ];
 
-        onCurrentItemChanged: {
-            toolbarTitle.text = currentItem.mTitle
-        }
+    // Set this property to another file name to change page
+    property string  currentPage : "MainView";
 
-    }
+    Repeater {
+        id: mainRepeater
+        model: pagesList;
+        delegate: Loader {
+            active: false;
+            asynchronous: false;
+            anchors.fill: parent;
+            visible: (currentPage === modelData);
+            source: "qrc:/qml/principais/%1.qml".arg(modelData)
+            onVisibleChanged:      { loadIfNotLoaded(); setCurrentTitle() }
+            Component.onCompleted: { loadIfNotLoaded(); setCurrentTitle() }
 
-    //Principal view da Stack
-    Item {
-        id: mainView
-        property string mTitle: "Inicial"
-
-        Text
-        {
-            text: "Selecione umas das opções no menu acima!"
-            font.pointSize: 12
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            anchors.centerIn: parent
+            function loadIfNotLoaded () {
+                // to load the file at first show
+                if (visible && !active) {
+                    active = true;
+                }
+            }
         }
     }
 

@@ -11,5 +11,7 @@
         <file>qml/views/CalhaGridview.qml</file>
         <file>qml/popups/AlertPopup.qml</file>
         <file>qml/popups/AlertPopup2.qml</file>
+        <file>qml/principais/DetCalhaParshal2.qml</file>
+        <file>qml/principais/MainView.qml</file>
     </qresource>
 </RCC>
