@@ -10,8 +10,18 @@ import xyz.aahome89.base 1.0
 Item {
 
     id: detCalhaParshal2
-    property StackView mStack
     property string mTitle: "Verificação dos parâmetros de Projeto para Calha Parshall (gradiente de velocidade, número de Froude e Tempo de Mistura)"
+
+    function calculoHa(vazao, k, n) {
+        var lala =  (k * Math.pow(vazao, n)).toFixed(2).toString().replace(".",",")
+        return lala
+    }
+
+    function calculoDlinha(d, w) {
+        var lala1 = 2/3
+        var lala =  ((2/3)*(d-w) + w).toFixed(4).toString().replace(".",",")
+        return lala
+    }
 
     ColumnLayout {
 
@@ -41,12 +51,42 @@ Item {
                     height: 300 //308
                     fillMode: Image.PreserveAspectFit
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    source: "qrc:/imagens/DimensaoETA.jpg"
+                    source: "qrc:/imagens/dimensaoETA2.png"
 
                 }
 
                 Label {
                     text: "Figura 1 - Dimensões da calha parshall (planta e corte)"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                Image {
+                    id: tabelaDimensoes
+                    width: 450 //501
+                    height: 300 //308
+                    fillMode: Image.PreserveAspectFit
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    source: "qrc:/imagens/tabela_dimensoes.png"
+
+                }
+
+                Label {
+                    text: "Tabela 1 - Dimensões da calha parshal"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+
+                Image {
+                    id: tabelaVazaoxEspessura
+                    width: 450 //501
+                    height: 300 //308
+                    fillMode: Image.PreserveAspectFit
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    source: "qrc:/imagens/tabelaRedimensionada.png"
+                }
+
+                Label {
+                    text: "Tabela 2 - Vazão x Garganta (W) e valores de K e n"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
@@ -59,7 +99,7 @@ Item {
             GroupBox {
                 id: groupBox
 
-                title: "Seção de cálculo 1 - determinação da garganta (W)"
+                title: "Seção de cálculo 1 - altura da lâmina líquida (Ha, em metros): "
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.preferredWidth: imagesBox1.implicitWidth / 2
@@ -68,12 +108,7 @@ Item {
                     //anchors.verticalCenter: parent.verticalCenter
                     spacing: 10
 
-                    ToolTip.delay: 1000
-                    ToolTip.timeout: 5000
-                    ToolTip.visible: hovered
-                    ToolTip.text: "Botão só é habilitado após uma vazão válida ser digitado no Passo 1 (Tabela 2)"
-
-                    Label { text: "Passo 1 - Inserir valor da vazão (L/s):" }
+                    Label { text: "Passo 1 - Inserir valor da vazão (m3):" }
 
                     TextField {
                         id:vazaoText
@@ -82,57 +117,7 @@ Item {
                         validator: DoubleValidator{bottom: 0.85 ; top: 3950.0 ; decimals: 2}
                     }
 
-                    Label { text: "Passo 2 - Escolha a calha desejada (W):" }
-
-                    Button {
-                        id: calculaW
-                        text:"Clique aqui"
-                        enabled: vazaoText.acceptableInput
-                        onClicked: {
-                            vazaoDialog.filtered = true
-                            vazaoDialog.open()
-                        }
-                    }
-
-                    Label { text: "Conforme a calha selecionada, as dimensões em centimetros são: " }
-
-                    CalhaGridview {
-                        id: calhaView
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                    }
-
-                }
-            }
-
-            GroupBox {
-
-                title: "Seção de cálculo 2 - cálculo da vazão"
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredWidth: imagesBox1.implicitWidth / 2
-
-                ColumnLayout{
-                    spacing: 10
-
-                    Label { text: "Passo 1 - Inserir altura da lâmina líquida (Ha) em metros:" }
-                    RowLayout{
-                        TextField { id: haText ; placeholderText: "Ha (m)" ; enabled: !vazaoHandler.parsed ; validator: DoubleValidator{decimals: 2} }
-                        Label { text: "ou" }
-                        Button {
-                            id: abreCSV
-                            text: vazaoHandler.parsed ? "Reset" : "Upload CSV"
-                            onClicked: function() {
-                                if (vazaoHandler.parsed) {
-                                    vazaoHandler.reset()
-                                } else {
-                                    fileDialog.selectExisting = true
-                                    fileDialog.open()
-                                }
-                            }
-                        }
-                    }
-                    Label { text: "Passo 2 - Utilize o K e n sugerido da seção 1 ou selecione outro W (ver tabela 2):" }
+                    Label { text: "Passo 2 - Utilize o K e n sugerido em outra seção ou selecione um W (ver tabela 2):" }
                     Button {
                         id: alteraW
                         text:"Alterar W"
@@ -141,24 +126,54 @@ Item {
                             vazaoDialog.open()
                         }
                     }
-                    TextField { id: kText ; placeholderText: "K" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
-                    TextField { id: nText ; placeholderText: "n" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
-                    Label { text: "Passo 3 - Aperte o botão para calcular:" }
+                    TextField { id: kText ; placeholderText: "K" ; enabled: false ; validator: DoubleValidator{}}
+                    TextField { id: nText ; placeholderText: "n" ; enabled: false ; validator: DoubleValidator{}}
+
+                    Label { text: "Formula: Ha = K*Q^n" }
+
                     Button {
-                        text: vazaoHandler.parsed ? "Exportar CSV" : "Calcular"
-                        enabled: (haText.acceptableInput || vazaoHandler.parsed ) && kText.acceptableInput && nText.acceptableInput
-                        onClicked: function() {
-                            if (vazaoHandler.parsed) {
-                                fileDialog.selectExisting = false
-                                fileDialog.open()
-                            } else {
-                                //vazaoResultadoText.text = (parseFloat(haText.text) / (parseFloat(kText.text) * parseFloat(nText.text))).toFixed(2)
-                                vazaoResultadoText.text = vazaoHandler.calculo_vazao(parseFloat(haText.text.replace(",","."))).toFixed(2)
-                            }
+                        id: calculaHa
+                        text:"Clique aqui"
+                        enabled: vazaoText.acceptableInput && kText.acceptableInput && nText.acceptableInput
+                        onClicked: {
+                            result1.text = "Resultado: " + calculoHa(parseFloat(vazaoText.text.replace(",",".")),parseFloat(kText.text.replace(",",".")),parseFloat(nText.text.replace(",","."))) + " m"
                         }
                     }
-                    Label { text: "Resultado da vazão (L/s):" ; visible: !vazaoHandler.parsed }
-                    TextField { id: vazaoResultadoText ; enabled: false ; readOnly: true ; visible: !vazaoHandler.parsed ; validator: DoubleValidator{} }
+
+                    Label { id: result1 ; text: "Resultado: " }
+
+                }
+            }
+
+            GroupBox {
+
+                title: "Seção de cálculo 2 - Largura da seção de medida (D, em metros)"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.preferredWidth: imagesBox1.implicitWidth / 2
+
+                ColumnLayout{
+                    spacing: 10
+
+                    Label { text: "Passo 1 - Selecione um W e o respectivo D (ver tabela 1):" }
+                    Button {
+                        id: alteraW2
+                        text:"Alterar W"
+                        onClicked: {
+                            vazaoDialog.filtered = false
+                            vazaoDialog.open()
+                        }
+                    }
+                    TextField { id: wText ; placeholderText: "W" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
+                    TextField { id: dText ; placeholderText: "D" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
+                    Label { text: "Formula: D' = (2/3)*(D-W) + W" }
+                    Button {
+                        text: "Calcular"
+                        enabled: wText.acceptableInput && dText.acceptableInput
+                        onClicked: dLinhaResultadoText.text = calculoDlinha(parseFloat(dText.text.replace(",",".")), parseFloat(wText.text.replace(",",".")))
+                    }
+                    Label { text: "Resultado D' (m):" ; visible: true }
+                    TextField { id: dLinhaResultadoText ; enabled: false ; readOnly: true ; visible: true ; validator: DoubleValidator{} }
                 }
             }
         }
@@ -171,6 +186,8 @@ Item {
         y: Math.round((parent.height - height) / 2)
         kText: kText
         nText: nText
+        wText: wText
+        dText: dText
         vazaoText: vazaoText
         calhaView: calhaView
         vazaoHandler: vazaoHandler

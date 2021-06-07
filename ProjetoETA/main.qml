@@ -16,9 +16,13 @@ ApplicationWindow {
     function setCurrentTitle() {
         var loaded
         for( var i = 0 ; i < mainRepeater.count ; i++) {
-            if ( mainRepeater.itemAt(i).item.visible ) {
-                loaded = mainRepeater.itemAt(i).item;
-                break;
+            try {
+                if ( mainRepeater.itemAt(i).item.visible ) {
+                    loaded = mainRepeater.itemAt(i).item;
+                    break;
+                }
+            } catch (error) {
+                console.log(error);
             }
         }
         console.log(loaded.mTitle);
@@ -29,7 +33,7 @@ ApplicationWindow {
         id: detCalhaParshalAction
         text: "Calha Parshall"
         onTriggered: {
-            currentPage = 'DetCalhaParshal'            
+            currentPage = 'DetCalhaParshal'
         }
     }
 

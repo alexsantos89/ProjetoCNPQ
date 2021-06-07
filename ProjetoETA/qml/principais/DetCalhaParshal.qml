@@ -10,7 +10,6 @@ import xyz.aahome89.base 1.0
 Item {
 
     id: detCalhaParshal
-    property StackView mStack
     property string mTitle: "Calha Parshall: determinação da garganta (W) e cálculo da vazão"
 
     ColumnLayout {
