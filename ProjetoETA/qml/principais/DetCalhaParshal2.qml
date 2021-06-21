@@ -12,14 +12,22 @@ Item {
     id: detCalhaParshal2
     property string mTitle: "Verificação dos parâmetros de Projeto para Calha Parshall (gradiente de velocidade, número de Froude e Tempo de Mistura)"
 
+    function replaceDecimal(textField) {
+        return parseFloat(textField.text.replace(",","."))
+    }
+
     function calculoHa(vazao, k, n) {
         var lala =  (k * Math.pow(vazao, n)).toFixed(2).toString().replace(".",",")
         return lala
     }
 
     function calculoDlinha(d, w) {
-        var lala1 = 2/3
         var lala =  ((2/3)*(d-w) + w).toFixed(4).toString().replace(".",",")
+        return lala
+    }
+
+    function calculoVa(vazao, dLinha, Ha) {
+        var lala =  (vazao / (dLinha*Ha)).toFixed(2).toString().replace(".",",")
         return lala
     }
 
@@ -92,88 +100,154 @@ Item {
             }
         }
 
+        ScrollView {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.fillHeight: true
+            clip: true
+            Layout.preferredWidth: 1900
 
-        RowLayout {
-            id: rowLayout
+            ScrollBar.vertical.policy: ScrollBar.AlwaysOn
 
-            GroupBox {
-                id: groupBox
+            GridLayout {
+                id: scrollableColumn
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                columns: 2
+                rowSpacing: 30
+                columnSpacing: 30
+                //Layout.fillWidth: true
+                clip: true
+                anchors.fill: parent
 
-                title: "Seção de cálculo 1 - altura da lâmina líquida (Ha, em metros): "
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredWidth: imagesBox1.implicitWidth / 2
+                GroupBox {
+                    id: groupBox
 
-                ColumnLayout{
-                    //anchors.verticalCenter: parent.verticalCenter
-                    spacing: 10
+                    title: "Seção de cálculo 1 - altura da lâmina líquida (Ha, em metros): "
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: imagesBox1.implicitWidth / 2
 
-                    Label { text: "Passo 1 - Inserir valor da vazão (m3):" }
+                    ColumnLayout{
+                        //anchors.verticalCenter: parent.verticalCenter
+                        spacing: 10
 
-                    TextField {
-                        id:vazaoText
-                        placeholderText: "Vazão (L/s)"
-                        //TODO define locale no validator
-                        validator: DoubleValidator{bottom: 0.85 ; top: 3950.0 ; decimals: 2}
-                    }
+                        Label { text: "Passo 1 - Inserir valor da vazão (m^3):" }
 
-                    Label { text: "Passo 2 - Utilize o K e n sugerido em outra seção ou selecione um W (ver tabela 2):" }
-                    Button {
-                        id: alteraW
-                        text:"Alterar W"
-                        onClicked: {
-                            vazaoDialog.filtered = false
-                            vazaoDialog.open()
+                        TextField {
+                            id:vazaoText
+                            placeholderText: "Vazão (m^3)"
+                            //TODO define locale no validator
+                            //validator: DoubleValidator{bottom: 0.85 ; top: 3950.0 ; decimals: 2}
                         }
-                    }
-                    TextField { id: kText ; placeholderText: "K" ; enabled: false ; validator: DoubleValidator{}}
-                    TextField { id: nText ; placeholderText: "n" ; enabled: false ; validator: DoubleValidator{}}
 
-                    Label { text: "Formula: Ha = K*Q^n" }
-
-                    Button {
-                        id: calculaHa
-                        text:"Clique aqui"
-                        enabled: vazaoText.acceptableInput && kText.acceptableInput && nText.acceptableInput
-                        onClicked: {
-                            result1.text = "Resultado: " + calculoHa(parseFloat(vazaoText.text.replace(",",".")),parseFloat(kText.text.replace(",",".")),parseFloat(nText.text.replace(",","."))) + " m"
+                        Label { text: "Passo 2 - Utilize o K e n sugerido em outra seção ou selecione um W (ver tabela 2):" }
+                        Button {
+                            id: alteraW
+                            text:"Alterar W"
+                            onClicked: {
+                                vazaoDialog.filtered = false
+                                vazaoDialog.open()
+                            }
                         }
+                        TextField { id: kText ; placeholderText: "K" ; enabled: false ; validator: DoubleValidator{}}
+                        TextField { id: nText ; placeholderText: "n" ; enabled: false ; validator: DoubleValidator{}}
+
+                        Label { text: "Formula: Ha = K*Q^n" }
+
+                        Button {
+                            id: calculaHa
+                            text:"Clique aqui"
+                            enabled: vazaoText.acceptableInput && kText.acceptableInput && nText.acceptableInput
+                            onClicked: {
+                                haResultadoText.text = calculoHa(replaceDecimal(vazaoText),replaceDecimal(kText),replaceDecimal(nText))
+                            }
+                        }
+
+                        Label { text: "Resultado Ha (m):" ; visible: true }
+                        TextField { id: haResultadoText ; enabled: false ; readOnly: true ; visible: true ; validator: DoubleValidator{} }
+
                     }
-
-                    Label { id: result1 ; text: "Resultado: " }
-
                 }
-            }
 
-            GroupBox {
+                GroupBox {
 
-                title: "Seção de cálculo 2 - Largura da seção de medida (D, em metros)"
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredWidth: imagesBox1.implicitWidth / 2
+                    title: "Seção de cálculo 2 - Largura da seção de medida (D, em metros)"
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: imagesBox1.implicitWidth / 2
 
-                ColumnLayout{
-                    spacing: 10
+                    ColumnLayout{
+                        spacing: 10
 
-                    Label { text: "Passo 1 - Selecione um W e o respectivo D (ver tabela 1):" }
-                    Button {
-                        id: alteraW2
-                        text:"Alterar W"
-                        onClicked: {
-                            vazaoDialog.filtered = false
-                            vazaoDialog.open()
+                        Label { text: "Passo 1 - Selecione um W e o respectivo D (ver tabela 1):" }
+                        Button {
+                            id: alteraW2
+                            text:"Alterar W"
+                            onClicked: {
+                                vazaoDialog.filtered = false
+                                vazaoDialog.open()
+                            }
                         }
+                        TextField { id: wText ; placeholderText: "W" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
+                        TextField { id: dText ; placeholderText: "D" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
+                        Label { text: "Formula: D' = (2/3)*(D-W) + W" }
+                        Button {
+                            text: "Calcular"
+                            enabled: wText.acceptableInput && dText.acceptableInput
+                            onClicked: dLinhaResultadoText.text = calculoDlinha(replaceDecimal(dText), replaceDecimal(wText))
+                        }
+                        Label { text: "Resultado D' (m):" ; visible: true }
+                        TextField { id: dLinhaResultadoText ; enabled: false ; readOnly: true ; visible: true ; validator: DoubleValidator{} }
                     }
-                    TextField { id: wText ; placeholderText: "W" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
-                    TextField { id: dText ; placeholderText: "D" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
-                    Label { text: "Formula: D' = (2/3)*(D-W) + W" }
-                    Button {
-                        text: "Calcular"
-                        enabled: wText.acceptableInput && dText.acceptableInput
-                        onClicked: dLinhaResultadoText.text = calculoDlinha(parseFloat(dText.text.replace(",",".")), parseFloat(wText.text.replace(",",".")))
+                }
+
+                GroupBox {
+
+                    title: "Seção de cálculo 3 - velocidade na seção de medida (Va, em metros por segundo): "
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    ColumnLayout {
+                        //anchors.verticalCenter: parent.verticalCenter
+                        spacing: 10
+
+                        Button {
+                            text: "Copia anteriores"
+                            onClicked: function() {
+                                vazaoText2.text = vazaoText.text
+                                dText2.text = dLinhaResultadoText.text
+                                haText2.text = haResultadoText.text
+                            }
+                        }
+
+                        Label { text: "Passo 1 - Inserir valor da vazão (m^3):" }
+
+                        RowLayout{
+                            TextField {
+                                id:vazaoText2
+                                placeholderText: "Vazão (m^3)"
+                            }
+                        }
+
+                        Label { text: "Passo 2 - Utilize o D' e Ha calculado:" }
+
+                        TextField { id: dText2 ; placeholderText: "D'" ; enabled: true ; validator: DoubleValidator{}}
+                        TextField { id: haText2 ; placeholderText: "Ha" ; enabled: true ; validator: DoubleValidator{}}
+
+                        Label { text: "Formula: Va = Q/(D'*Ha)" }
+
+                        Button {
+                            id: calculaVa
+                            text:"Clique aqui"
+                            enabled: vazaoText2.acceptableInput && dText2.acceptableInput && haText2.acceptableInput
+                            onClicked: {
+                                vaResultadoText.text =  calculoVa(replaceDecimal(vazaoText2),replaceDecimal(dText2),replaceDecimal(haText2))
+                            }
+                        }
+
+                        Label { text: "Resultado Va (m/s):" ; visible: true }
+                        TextField { id: vaResultadoText ; enabled: false ; readOnly: true ; visible: true ; validator: DoubleValidator{} }
+
                     }
-                    Label { text: "Resultado D' (m):" ; visible: true }
-                    TextField { id: dLinhaResultadoText ; enabled: false ; readOnly: true ; visible: true ; validator: DoubleValidator{} }
                 }
             }
         }

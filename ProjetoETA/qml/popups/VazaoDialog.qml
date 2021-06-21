@@ -30,8 +30,10 @@ Dialog {
         nText.text = vazaoListView.currentItem.myData.n
         vazaoHandler.k = vazaoListView.currentItem.myData.k
         vazaoHandler.n = vazaoListView.currentItem.myData.n
-        wText.text = vazaoListView.currentItem.myData.w / 1000
-        dText.text = (vazaoListView.currentItem.myData.medD / 100).toFixed(3)
+        if (wText !== null) {
+            wText.text = vazaoListView.currentItem.myData.w / 1000
+            dText.text = (vazaoListView.currentItem.myData.medD / 100).toFixed(3)
+        }
         if (vazaoDialog.filtered){
             calhaView.myData = vazaoListView.currentItem.myData
             calhaView.updateModel()
