@@ -20,6 +20,7 @@ Dialog {
     property TextField nText
     property TextField wText
     property TextField dText
+    property TextField medNText
     property bool filtered
     property CalhaGridview calhaView
     property CSVVazaoHandler vazaoHandler
@@ -38,6 +39,7 @@ Dialog {
             calhaView.myData = vazaoListView.currentItem.myData
             calhaView.updateModel()
         }
+        medNText.text = (vazaoListView.currentItem.myData.medN / 100).toFixed(3)
     }
 
     onRejected: vazaoDialog.close()

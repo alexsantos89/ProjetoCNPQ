@@ -31,6 +31,12 @@ Item {
         return lala
     }
 
+    function calculoEa(Ha, Va, n) {
+        //TODO faltando um parametro na formula a ser confirmado
+        var lala =  (Ha + Math.pow(Va, 2) / 2 + n).toFixed(2).toString().replace(".",",")
+        return lala
+    }
+
     ColumnLayout {
 
         id: mainColumn
@@ -249,6 +255,54 @@ Item {
 
                     }
                 }
+
+                GroupBox {
+
+                    title: "Seção de cálculo 4 - energia total disponível (Ea, em metros): "
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    ColumnLayout {
+                        spacing: 10
+
+                        Button {
+                            text: "Copia anteriores"
+                            onClicked: function() {
+                                vaText2.text = vaResultadoText.text
+                                haText3.text = haResultadoText.text
+                            }
+                        }
+
+                        Label { text: "Passo 1 - Utilize Ha e Va calculado:" }
+
+                        TextField { id: haText3 ; placeholderText: "Va" ; enabled: true ; validator: DoubleValidator{}}
+                        TextField { id: vaText2 ; placeholderText: "Ha" ; enabled: true ; validator: DoubleValidator{}}
+
+                        Label { text: "Passo 2 - Selecione um W e o respectivo N (ver tabela 1):" }
+                        Button {
+                            text:"Alterar W"
+                            onClicked: {
+                                vazaoDialog.filtered = false
+                                vazaoDialog.open()
+                            }
+                        }
+                        TextField { id: medNText ; placeholderText: "N" ; enabled: false ; readOnly: true ; validator: DoubleValidator{}}
+
+                        Label { text: "Formula: Ea = Ha + Va^2/2g + N)" }
+
+                        Button {
+                            text:"Clique aqui"
+                            enabled: vaText2.acceptableInput && haText3.acceptableInput && medNText.acceptableInput
+                            onClicked: {
+                                eaResultadoText.text =  calculoEa(replaceDecimal(haText3),replaceDecimal(vaText2),replaceDecimal(medNText))
+                            }
+                        }
+
+                        Label { text: "Resultado Ea (m):" ; visible: true }
+                        TextField { id: eaResultadoText ; enabled: false ; readOnly: true ; visible: true ; validator: DoubleValidator{} }
+
+                    }
+                }
             }
         }
 
@@ -262,6 +316,7 @@ Item {
         nText: nText
         wText: wText
         dText: dText
+        medNText: medNText
         vazaoText: vazaoText
         calhaView: calhaView
         vazaoHandler: vazaoHandler
